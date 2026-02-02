@@ -1,4 +1,4 @@
-#include "EventQueue.hpp"
+#include "engine/EventQueue.hpp"
 
 EventQueue::EventQueue() {}
 void EventQueue::push(const Event &e) { queue.push(e); }

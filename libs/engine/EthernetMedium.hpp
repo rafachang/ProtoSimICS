@@ -4,10 +4,12 @@
 #include <functional>
 
 class SimulatedSocket;
+class EventQueue;
+class SimulationClock;
 
 class EthernetMedium {
 public:
-    explicit EthernetMedium(uint64_t latency);
+    explicit EthernetMedium(uint64_t latency, EventQueue& eventQueue, SimulationClock& simulationClock);
 
     void transmit(
         SimulatedSocket* from,
@@ -17,4 +19,6 @@ public:
 
 private:
     uint64_t latency;
+    EventQueue& eventQueue;
+    SimulationClock& simulationClock;
 };

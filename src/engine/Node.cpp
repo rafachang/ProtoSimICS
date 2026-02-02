@@ -1,4 +1,4 @@
-#include "Node.hpp"
+#include "engine/Node.hpp"
 
 Node::Node(const std::string &name, EthernetMedium &medium)
     : name(name), socket(medium) {}

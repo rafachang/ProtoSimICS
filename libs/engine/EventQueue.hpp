@@ -2,14 +2,11 @@
 #include "Event.hpp"
 #include <queue>
 
-
 class EventQueue {
 public:
   EventQueue();
   void push(const Event &e);
-
   bool empty() const;
-
   Event pop();
 
 private:

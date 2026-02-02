@@ -16,7 +16,7 @@ find_package(fmt CONFIG REQUIRED)
 #We're using the project name as the target name, but you can change it to make them different.
 #With this setup, the name of the executable will be the same as the project name.
 add_executable(${PROJECT_NAME}
-        src/main.cpp
+        src/app/main.cpp
         src/engine/EthernetMedium.cpp
         src/engine/Event.cpp
         src/engine/EventQueue.cpp
@@ -27,6 +27,7 @@ add_executable(${PROJECT_NAME}
 
 target_include_directories(${PROJECT_NAME}
     PRIVATE
+        libs
         src
 )
 

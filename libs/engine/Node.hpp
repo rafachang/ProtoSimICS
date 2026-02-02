@@ -3,6 +3,7 @@
 #include "EthernetMedium.hpp"
 #include <string>
 
+
 class Node {
 public:
   Node(const std::string &name, EthernetMedium &medium);
