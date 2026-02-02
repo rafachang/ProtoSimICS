@@ -1,17 +1,26 @@
 #include "engine/EthernetMedium.hpp"
 #include "engine/Event.hpp"
 #include "engine/EventQueue.hpp"
+#include "engine/SimulatedSocket.hpp"
 #include "engine/SimulationClock.hpp"
 #include <stdio.h>
-
 
 EthernetMedium::EthernetMedium(uint64_t latency, EventQueue &eventQueue,
                                SimulationClock &simulationClock)
     : latency(latency), eventQueue(eventQueue),
       simulationClock(simulationClock) {}
 
+void EthernetMedium::addSocket(SimulatedSocket *socket) {
+  sockets.push_back(socket);
+}
+
 void EthernetMedium::transmit(SimulatedSocket *from,
                               const std::vector<uint8_t> &data,
-                              std::function<void()> delivery) {
-  eventQueue.push(Event{simulationClock.now() + latency, delivery});
+                              std::function<void()>) {
+  for (auto *sock : sockets) {
+    if (sock == from)
+      continue;
+    eventQueue.push(Event(simulationClock.now() + latency,
+                          [sock, data]() { sock->deliver(data); }));
+  }
 }
