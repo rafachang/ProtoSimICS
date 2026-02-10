@@ -16,6 +16,8 @@ public:
   void onReceive(std::function<void(const std::vector<uint8_t> &)> cb);
   void deliver(const std::vector<uint8_t> &data);
 
+  const Node &getParentNode() const;
+
 private:
   EthernetMedium &medium;
   std::function<void(const std::vector<uint8_t> &)> receiveCallback;

@@ -36,3 +36,7 @@ void SimulatedSocket::deliver(const std::vector<uint8_t> &data) {
     std::cout << "" << parentNode.getName() << " recebeu " << data.size() << " bytes\n";
   }
 }
+
+const Node &SimulatedSocket::getParentNode() const {
+  return parentNode;
+}

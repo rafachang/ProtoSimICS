@@ -28,6 +28,9 @@ public:
                          SimulatedSocket *to,
                          std::function<void()> delivery);
 
+  // Simulate loss of packets
+  bool shouldDrop();
+
 private:
   uint64_t latency;
   EventQueue &eventQueue;
