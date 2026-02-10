@@ -1,7 +1,8 @@
 #pragma once
-#include <vector>
 #include <cstdint>
 #include <functional>
+#include <vector>
+
 
 class SimulatedSocket;
 class EventQueue;
@@ -9,19 +10,26 @@ class SimulationClock;
 
 class EthernetMedium {
 public:
-    explicit EthernetMedium(uint64_t latency, EventQueue& eventQueue, SimulationClock& simulationClock);
+  explicit EthernetMedium(uint64_t latency, EventQueue &eventQueue,
+                          SimulationClock &simulationClock);
 
-    void addSocket(SimulatedSocket* socket);
+  void addSocket(SimulatedSocket *socket);
 
-    void transmit(
-        SimulatedSocket* from,
-        const std::vector<uint8_t>& data,
-        std::function<void()> delivery
-    );
+  void transmitBroadcast(SimulatedSocket *from,
+                         const std::vector<uint8_t> &data,
+                         std::function<void()> delivery);
+  void transmitMulticast(SimulatedSocket *from,
+                         const std::vector<uint8_t> &data,
+                         std::vector<SimulatedSocket *> to,
+                         std::function<void()> delivery);
+  void transmitUnicast(SimulatedSocket *from,
+                         const std::vector<uint8_t> &data,
+                         SimulatedSocket *to,
+                         std::function<void()> delivery);
 
 private:
-    uint64_t latency;
-    EventQueue& eventQueue;
-    SimulationClock& simulationClock;
-    std::vector<SimulatedSocket*> sockets;
+  uint64_t latency;
+  EventQueue &eventQueue;
+  SimulationClock &simulationClock;
+  std::vector<SimulatedSocket *> sockets;
 };

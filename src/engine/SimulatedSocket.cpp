@@ -1,5 +1,7 @@
 #include "engine/SimulatedSocket.hpp"
 #include "engine/EthernetMedium.hpp"
+#include <iostream>
+using namespace std;
 
 SimulatedSocket::SimulatedSocket(EthernetMedium &medium) : medium(medium) {
   medium.addSocket(this);
@@ -10,11 +12,24 @@ void SimulatedSocket::onReceive(
   receiveCallback = cb;
 }
 
-void SimulatedSocket::send(const std::vector<uint8_t>& data) {
-    medium.transmit(this, data, []() {});
+void SimulatedSocket::sendBroadcast(const std::vector<uint8_t> &data) {
+
+  medium.transmitBroadcast(this, data, []() {});
+}
+
+void SimulatedSocket::sendMulticast(const std::vector<uint8_t> &data,
+                                    const std::vector<SimulatedSocket *> &to) {
+  medium.transmitMulticast(this, data, to, []() {});
+}
+
+void SimulatedSocket::sendUnicast(const std::vector<uint8_t> &data,
+                                  SimulatedSocket *to) {
+  medium.transmitUnicast(this, data, to, []() {});
 }
 
 void SimulatedSocket::deliver(const std::vector<uint8_t> &data) {
-  if (receiveCallback)
+  if (receiveCallback) {
+    std::cout << "Socket " << this << " recebeu " << data.size() << " bytes\n";
     receiveCallback(data);
+  }
 }

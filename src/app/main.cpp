@@ -14,22 +14,43 @@ int main() {
 
   EthernetMedium eth(10, eventQueue, simulationClock);
 
-  Node plc("PLC", eth);
-  Node rtu("RTU", eth);
+  Node plc("PLC", eth, eventQueue, simulationClock);
+  Node rtu1("RTU1", eth, eventQueue, simulationClock);
+  Node rtu2("RTU2", eth, eventQueue, simulationClock);
+  Node rtu3("RTU3", eth, eventQueue, simulationClock);
+  Node rtu4("RTU4", eth, eventQueue, simulationClock);
 
   plc.getSocket().onReceive([](const std::vector<uint8_t> &data) {
     std::cout << "PLC recebeu " << data.size() << " bytes\n";
   });
 
-  rtu.getSocket().onReceive([](const std::vector<uint8_t> &data) {
-    std::cout << "RTU recebeu " << data.size() << " bytes\n";
+  rtu1.getSocket().onReceive([](const std::vector<uint8_t> &data) {
+    std::cout << "RTU1 recebeu " << data.size() << " bytes\n";
+  });
+
+  rtu2.getSocket().onReceive([](const std::vector<uint8_t> &data) {
+    std::cout << "RTU2 recebeu " << data.size() << " bytes\n";
+  });
+
+  rtu3.getSocket().onReceive([](const std::vector<uint8_t> &data) {
+    std::cout << "RTU3 recebeu " << data.size() << " bytes\n";
+  });
+
+  rtu4.getSocket().onReceive([](const std::vector<uint8_t> &data) {
+    std::cout << "RTU4 recebeu " << data.size() << " bytes\n";
   });
 
   std::cout << "Iniciando simulação...\n";
 
-  plc.getSocket().send({0x10, 0x20, 0x30, 0x40});
-  rtu.getSocket().send({0x10, 0x20});
-  // plc.getSocket().send({0x01, 0x02, 0x03, 0x21});
+  plc.sendBroadcast({0x10});
+  rtu1.sendUnicast({0x20, 0x21}, &plc.getSocket());
+  rtu2.sendMulticast({0x30, 0x31, 0x32}, {&plc.getSocket(), &rtu3.getSocket()});
+
+  plc.printLogs();
+  rtu1.printLogs();
+  rtu2.printLogs();
+  rtu3.printLogs();
+  rtu4.printLogs();
 
   while (!eventQueue.empty()) {
     auto e = eventQueue.pop();

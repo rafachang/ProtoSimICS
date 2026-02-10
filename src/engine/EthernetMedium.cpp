@@ -14,13 +14,43 @@ void EthernetMedium::addSocket(SimulatedSocket *socket) {
   sockets.push_back(socket);
 }
 
-void EthernetMedium::transmit(SimulatedSocket *from,
-                              const std::vector<uint8_t> &data,
-                              std::function<void()>) {
+void EthernetMedium::transmitBroadcast(SimulatedSocket *from,
+                                       const std::vector<uint8_t> &data,
+                                       std::function<void()>) {
   for (auto *sock : sockets) {
     if (sock == from)
       continue;
     eventQueue.push(Event(simulationClock.now() + latency,
                           [sock, data]() { sock->deliver(data); }));
+  }
+}
+
+void EthernetMedium::transmitMulticast(SimulatedSocket *from,
+                                       const std::vector<uint8_t> &data,
+                                       std::vector<SimulatedSocket *> to,
+                                       std::function<void()>) {
+  for (auto *sock : sockets) {
+    if (sock == from)
+      continue;
+    for (auto *target : to) {
+      if (sock == target) {
+        eventQueue.push(Event(simulationClock.now() + latency,
+                              [sock, data]() { sock->deliver(data); }));
+        break;
+      }
+    }
+  }
+}
+
+void EthernetMedium::transmitUnicast(SimulatedSocket *from,
+                                     const std::vector<uint8_t> &data,
+                                     SimulatedSocket *to,
+                                     std::function<void()>) {
+  for (auto *sock : sockets) {
+    if (sock == to) {
+      eventQueue.push(Event(simulationClock.now() + latency,
+                            [sock, data]() { sock->deliver(data); }));
+      break;
+    }
   }
 }
