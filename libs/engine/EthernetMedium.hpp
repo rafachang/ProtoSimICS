@@ -14,7 +14,8 @@ public:
                           SimulationClock &simulationClock);
 
   void addSocket(SimulatedSocket *socket);
-
+  const std::vector<SimulatedSocket *> &getSockets() const;
+  
   void transmitBroadcast(SimulatedSocket *from,
                          const std::vector<uint8_t> &data,
                          std::function<void()> delivery);

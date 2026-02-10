@@ -4,10 +4,11 @@
 #include <vector>
 
 class EthernetMedium;
+class Node;
 
 class SimulatedSocket {
 public:
-  SimulatedSocket(EthernetMedium &medium);
+  SimulatedSocket(EthernetMedium &medium, Node &parentNode);
 
   void sendBroadcast(const std::vector<uint8_t> &data);
   void sendMulticast(const std::vector<uint8_t> &data, const std::vector<SimulatedSocket *> &to);
@@ -18,4 +19,5 @@ public:
 private:
   EthernetMedium &medium;
   std::function<void(const std::vector<uint8_t> &)> receiveCallback;
+  Node &parentNode;
 };

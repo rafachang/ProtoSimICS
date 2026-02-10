@@ -24,8 +24,9 @@ public:
 
 private:
   std::string name;
-  SimulatedSocket socket;
+  EthernetMedium &medium;
   EventQueue &eventQueue;
   SimulationClock &simulationClock;
+  SimulatedSocket socket;
   std::vector<MessageLog> logs;
 };

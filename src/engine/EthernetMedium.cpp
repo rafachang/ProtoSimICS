@@ -14,6 +14,10 @@ void EthernetMedium::addSocket(SimulatedSocket *socket) {
   sockets.push_back(socket);
 }
 
+const std::vector<SimulatedSocket *> &EthernetMedium::getSockets() const {
+  return sockets;
+}
+
 void EthernetMedium::transmitBroadcast(SimulatedSocket *from,
                                        const std::vector<uint8_t> &data,
                                        std::function<void()>) {

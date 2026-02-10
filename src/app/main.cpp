@@ -20,25 +20,29 @@ int main() {
   Node rtu3("RTU3", eth, eventQueue, simulationClock);
   Node rtu4("RTU4", eth, eventQueue, simulationClock);
 
-  plc.getSocket().onReceive([](const std::vector<uint8_t> &data) {
-    std::cout << "PLC recebeu " << data.size() << " bytes\n";
-  });
+  #pragma region Saida de recebimento
 
-  rtu1.getSocket().onReceive([](const std::vector<uint8_t> &data) {
-    std::cout << "RTU1 recebeu " << data.size() << " bytes\n";
-  });
+  // plc.getSocket().onReceive([](const std::vector<uint8_t> &data) {
+  //   std::cout << "PLC recebeu " << data.size() << " bytes\n";
+  // });
 
-  rtu2.getSocket().onReceive([](const std::vector<uint8_t> &data) {
-    std::cout << "RTU2 recebeu " << data.size() << " bytes\n";
-  });
+  // rtu1.getSocket().onReceive([](const std::vector<uint8_t> &data) {
+  //   std::cout << "RTU1 recebeu " << data.size() << " bytes\n";
+  // });
 
-  rtu3.getSocket().onReceive([](const std::vector<uint8_t> &data) {
-    std::cout << "RTU3 recebeu " << data.size() << " bytes\n";
-  });
+  // rtu2.getSocket().onReceive([](const std::vector<uint8_t> &data) {
+  //   std::cout << "RTU2 recebeu " << data.size() << " bytes\n";
+  // });
 
-  rtu4.getSocket().onReceive([](const std::vector<uint8_t> &data) {
-    std::cout << "RTU4 recebeu " << data.size() << " bytes\n";
-  });
+  // rtu3.getSocket().onReceive([](const std::vector<uint8_t> &data) {
+  //   std::cout << "RTU3 recebeu " << data.size() << " bytes\n";
+  // });
+
+  // rtu4.getSocket().onReceive([](const std::vector<uint8_t> &data) {
+  //   std::cout << "RTU4 recebeu " << data.size() << " bytes\n";
+  // });
+
+  #pragma endregion comentada para evitar poluição visual, mas pode ser reativada para debug
 
   std::cout << "Iniciando simulação...\n";
 

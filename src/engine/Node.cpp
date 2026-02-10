@@ -9,7 +9,7 @@ using namespace std;
 
 Node::Node(const std::string &name, EthernetMedium &medium,
            EventQueue &eventQueue, SimulationClock &simulationClock)
-    : name(name), socket(medium), eventQueue(eventQueue),
+    : name(name), medium(medium), socket(medium, *this), eventQueue(eventQueue),
       simulationClock(simulationClock) {}
 
 SimulatedSocket &Node::getSocket() { return socket; }
@@ -38,9 +38,9 @@ void Node::printLogs() {
 void Node::sendBroadcast(const std::vector<uint8_t> &data) {
   MessageLog log;
   log.timestamp = simulationClock.now();
-  log.type = "sent";
+  log.type = "sent broadcast";
   log.sender = &socket;
-  log.receiver = {&socket}; // Placeholder, to be updated with actual receivers
+  log.receiver = medium.getSockets(); // Placeholder, to be updated with actual receivers
   log.size = data.size();
   log.deliveryTime = 0; // To be updated upon delivery
   logs.push_back(log);
@@ -51,9 +51,9 @@ void Node::sendMulticast(const std::vector<uint8_t> &data,
                          const std::vector<SimulatedSocket *> &to) {
   MessageLog log;
   log.timestamp = simulationClock.now();
-  log.type = "sent";
+  log.type = "sent multicast";
   log.sender = &socket;
-  log.receiver = {&socket}; // Placeholder, to be updated with actual receivers
+  log.receiver = to; // Placeholder, to be updated with actual receivers
   log.size = data.size();
   log.deliveryTime = 0; // To be updated upon delivery
   logs.push_back(log);
@@ -63,9 +63,9 @@ void Node::sendMulticast(const std::vector<uint8_t> &data,
 void Node::sendUnicast(const std::vector<uint8_t> &data, SimulatedSocket *to) {
   MessageLog log;
   log.timestamp = simulationClock.now();
-  log.type = "sent";
+  log.type = "sent unicast";
   log.sender = &socket;
-  log.receiver = {&socket}; // Placeholder, to be updated with actual receivers
+  log.receiver = {to}; // Placeholder, to be updated with actual receivers
   log.size = data.size();
   log.deliveryTime = 0; // To be updated upon delivery
   logs.push_back(log);

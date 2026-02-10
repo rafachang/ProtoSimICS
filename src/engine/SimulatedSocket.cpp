@@ -1,9 +1,10 @@
 #include "engine/SimulatedSocket.hpp"
 #include "engine/EthernetMedium.hpp"
+#include "engine/Node.hpp"
 #include <iostream>
 using namespace std;
 
-SimulatedSocket::SimulatedSocket(EthernetMedium &medium) : medium(medium) {
+SimulatedSocket::SimulatedSocket(EthernetMedium &medium, Node &parentNode) : medium(medium), parentNode(parentNode) {
   medium.addSocket(this);
 }
 
@@ -29,7 +30,9 @@ void SimulatedSocket::sendUnicast(const std::vector<uint8_t> &data,
 
 void SimulatedSocket::deliver(const std::vector<uint8_t> &data) {
   if (receiveCallback) {
-    std::cout << "Socket " << this << " recebeu " << data.size() << " bytes\n";
     receiveCallback(data);
+  }
+  else {
+    std::cout << "" << parentNode.getName() << " recebeu " << data.size() << " bytes\n";
   }
 }
